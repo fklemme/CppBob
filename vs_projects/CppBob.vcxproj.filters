@@ -52,12 +52,27 @@
     <None Include="..\maps\level1.map">
       <Filter>Maps</Filter>
     </None>
+    <None Include="..\maps\level2.map">
+      <Filter>Maps</Filter>
+    </None>
+    <None Include="..\maps\level3.map">
+      <Filter>Maps</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\images\wall.png">
       <Filter>Textures</Filter>
     </Image>
     <Image Include="..\images\empty.png">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="..\images\bob.png">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="..\images\destination.png">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="..\images\start.png">
       <Filter>Textures</Filter>
     </Image>
   </ItemGroup>
