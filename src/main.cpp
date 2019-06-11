@@ -31,6 +31,8 @@ int main() {
   try {
     // Strategie ausführen
     strategy(*bob);
+
+    std::cout << "Strategy ended without reaching destination. :(" << std::endl;
   } catch (GameOver& e) {
     std::cout << "Game over!\n" << e.what() << std::endl;
   }

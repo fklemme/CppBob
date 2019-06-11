@@ -18,6 +18,9 @@ void window_handler(Game* game) {
     if (current_map != game->m_map) {
       current_map = game->m_map;
       if (current_map != nullptr) {
+        window.setSize(
+            sf::Vector2u((unsigned)(Map::tile_size_x * current_map->width()),
+                         (unsigned)(Map::tile_size_y * current_map->height())));
         sf::View view(sf::FloatRect(0.0f, 0.0f,
                                     Map::tile_size_x * current_map->width(),
                                     Map::tile_size_y * current_map->height()));
