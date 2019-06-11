@@ -27,5 +27,9 @@ class Game {
 
 class GameOver : public std::exception {
  public:
-  GameOver(char const* const msg) : std::exception(msg) {}
+  inline GameOver(std::string msg) : m_msg(std::move(msg)) {}
+  inline const char* what() const noexcept override { return m_msg.c_str(); }
+
+  private:
+  std::string m_msg;
 };
