@@ -14,7 +14,7 @@ class Game {
   ~Game();
 
   void load_map(const std::string& file_path);
-  std::shared_ptr<Bob> make_bob();
+  std::shared_ptr<Bob> get_bob();
   void check_state();
 
  private:

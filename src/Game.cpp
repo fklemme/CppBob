@@ -74,7 +74,7 @@ void Game::load_map(const std::string& file_path) {
   m_map = std::make_shared<Map>(map_data);
 }
 
-std::shared_ptr<Bob> Game::make_bob() {
+std::shared_ptr<Bob> Game::get_bob() {
   if (m_bob == nullptr) {
     Position start_pos = m_map->starting_position();
     m_bob = std::make_shared<Bob>(this, m_map, start_pos);

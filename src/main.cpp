@@ -26,7 +26,7 @@ int main() {
   // Lade Karte
   game.load_map("maps/level1.map");
   // Platziere Bob
-  auto bob = game.make_bob();
+  auto bob = game.get_bob();
 
   try {
     // Strategie ausführen
