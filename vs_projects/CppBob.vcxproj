@@ -170,6 +170,7 @@
     <None Include="..\maps\level2.map" />
     <None Include="..\maps\level3.map" />
     <None Include="..\maps\level4.map" />
+    <None Include="..\maps\level5.map" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\images\bob.png" />

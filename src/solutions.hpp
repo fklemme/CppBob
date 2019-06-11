@@ -71,4 +71,33 @@ inline void level4(Bob& bob) {
   }
 }
 
+inline void level5(Bob& bob) {
+  // Face right direction
+  bob.turn_right();
+
+  // Helper function
+  auto wall_to_the_right = [&]() {
+    bob.turn_right();  // turn right for check
+    bool wall = bob.wall_in_front();
+    bob.turn_left();  // return to initial orientation
+    return wall;
+  };
+
+  // Forever...
+  while (true) {
+    if (bob.wall_in_front()) {
+      // Walk around obstacle
+      bob.turn_left();
+      bob.move();
+      bob.turn_right();
+      bob.move();
+      while (wall_to_the_right()) bob.move();
+      bob.turn_right();
+      bob.move();
+      bob.turn_left();
+    } else
+      bob.move();
+  }
+}
+
 }  // namespace solutions

@@ -64,6 +64,9 @@
     <None Include="..\maps\level4.map">
       <Filter>Maps</Filter>
     </None>
+    <None Include="..\maps\level5.map">
+      <Filter>Maps</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\images\wall.png">
