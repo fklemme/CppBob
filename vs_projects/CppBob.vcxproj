@@ -162,12 +162,14 @@
     <ClInclude Include="..\src\Bob.hpp" />
     <ClInclude Include="..\src\Game.hpp" />
     <ClInclude Include="..\src\Map.hpp" />
+    <ClInclude Include="..\src\solutions.hpp" />
     <ClInclude Include="..\src\TextureCache.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\maps\level1.map" />
     <None Include="..\maps\level2.map" />
     <None Include="..\maps\level3.map" />
+    <None Include="..\maps\level4.map" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\images\bob.png" />
