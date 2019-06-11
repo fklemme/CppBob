@@ -4,5 +4,6 @@ LDFLAGS  := -lsfml-graphics \
             -lsfml-window \
             -lpthread
 
-test: $(wildcard src/*.cpp)
+bin/cppbob: $(wildcard src/*.cpp)
+	@test -d bin || mkdir -p bin
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
