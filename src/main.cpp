@@ -2,6 +2,9 @@
 
 #include "Game.hpp"
 
+// Choose the map to be loaded
+const std::string map = "maps/level1.map";
+
 // Guide Bob to the destination!
 void strategy(Bob& bob) {
   // Move to the right
@@ -23,7 +26,8 @@ void strategy(Bob& bob) {
 int main() {
   // Create game and load map
   Game game;
-  game.load_map("maps/level1.map");
+  game.load_map(map);
+
   // Place Bob at starting location, returns a pointer
   auto bob = game.get_bob();
 
