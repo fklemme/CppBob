@@ -1,41 +1,31 @@
+#include <functional>
 #include <iostream>
+#include <vector>
 
 #include "Game.hpp"
-
-// Guide Bob to the destination!
-void strategy(Bob& bob) {
-  // Move to the right
-  bob.turn_right();
-  bob.move();
-  bob.move();
-  bob.move();
-  bob.move();
-  bob.move();
-  // Then move down
-  bob.turn_right();
-  bob.move();
-  bob.move();
-  bob.move();
-  bob.move();
-  bob.move();
-}
+#include "solutions.hpp"
 
 int main() {
-  // Create game and load map
+  // Create game and set high speed
   Game game;
-  game.load_map("maps/level1.map");
-  // Place Bob at starting location, returns a pointer
-  auto bob = game.get_bob();
+  game.step_delay(Game::seconds(0.1f));
 
-  // Speed up game for bigger maps (smaller = faster)
-  // game.step_delay(Game::seconds(0.25f));
+  // Levels and their strategy functions
+  std::vector<std ::pair<std::string, std::function<void(Bob&)>>> levels;
+  levels.emplace_back("maps/level1.map", solutions::level1);
+  levels.emplace_back("maps/level2.map", solutions::level2);
+  levels.emplace_back("maps/level3.map", solutions::level3);
+  levels.emplace_back("maps/level4.map", solutions::level4);
+  levels.emplace_back("maps/level5.map", solutions::level5);
 
-  try {
-    // Execute strategy that guides Bob to the destination
-    strategy(*bob);
-
-    std::cout << "Strategy ended without reaching destination. :(" << std::endl;
-  } catch (GameOver& e) {
-    std::cout << "Game over!\n" << e.what() << std::endl;
+  // Load and run level after level
+  for (auto& [map, strategy] : levels) {
+    try {
+      game.load_map(map);
+      auto bob = game.get_bob();
+      strategy(*bob);
+    } catch (GameOver& e) {
+      std::cout << "Game over on " + map + "!\n" << e.what() << std::endl;
+    }
   }
 }
