@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <chrono>
 #include <memory>
 #include <string>
 #include <thread>
@@ -17,6 +18,12 @@ class Game {
   std::shared_ptr<Bob> get_bob();
   void check_state();
 
+  using seconds = std::chrono::duration<float>;  // float seconds
+  inline seconds step_delay() const { return m_step_delay; }
+  inline void step_delay(seconds s) {
+    if (s > seconds(0.0f)) m_step_delay = s;
+  }
+
  private:
   // Handle drawing window in an own thread.
   friend void window_handler(Game*);
@@ -25,7 +32,8 @@ class Game {
   // This is just a workaround for a Windows specific problem as described here:
   // https://en.sfml-dev.org/forums/index.php?topic=22131.msg156596#msg156596
   sf::Context m_context;
-  bool m_running;
+  bool m_running = true;
+  seconds m_step_delay{1.0f};
   std::shared_ptr<Map> m_map;
   std::shared_ptr<Bob> m_bob;
 };

@@ -25,8 +25,8 @@ const sf::Texture &char_to_texture(char c) {
 }
 }  // namespace
 
-Map::Map(const std::vector<std::vector<char>> &char_map)
-    : m_char_map(char_map) {
+Map::Map(const std::string &title, std::vector<std::vector<char>> &char_map)
+    : m_title(title), m_char_map(char_map) {
   // --- Check map data ---
   // Check minimal size
   if (m_char_map.size() < 1) throw std::logic_error("Empty map data!");

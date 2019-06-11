@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Map.hpp"
 #include <memory>
+
+#include "Map.hpp"
 
 enum Orientation { up, right, down, left };
 

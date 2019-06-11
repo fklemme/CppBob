@@ -15,7 +15,7 @@ Bob::Bob(Game* game_ptr, std::shared_ptr<Map> map, Position starting_position)
 }
 
 void Bob::move() {
-  std::this_thread::sleep_for(std::chrono::seconds(1));
+  std::this_thread::sleep_for(m_game_ptr->step_delay());
 
   if (wall_in_front()) return;  // don't move
 
@@ -39,15 +39,17 @@ void Bob::move() {
 }
 
 void Bob::turn_right() {
-  std::this_thread::sleep_for(std::chrono::seconds(1));
+  std::this_thread::sleep_for(m_game_ptr->step_delay());
   m_orientation = (Orientation)((m_orientation + 1) % 4);
   m_sprite.setRotation(90.0f * m_orientation);
+  m_game_ptr->check_state();
 }
 
 void Bob::turn_left() {
-  std::this_thread::sleep_for(std::chrono::seconds(1));
+  std::this_thread::sleep_for(m_game_ptr->step_delay());
   m_orientation = (Orientation)((m_orientation + 3) % 4);
   m_sprite.setRotation(90.0f * m_orientation);
+  m_game_ptr->check_state();
 }
 
 bool Bob::wall_in_front() const {

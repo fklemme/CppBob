@@ -12,7 +12,7 @@ inline void level1(Bob& bob) {
   bob.move();
   bob.move();
   bob.move();
-  // Move down
+  // Then move down
   bob.turn_right();
   bob.move();
   bob.move();
@@ -22,7 +22,7 @@ inline void level1(Bob& bob) {
 }
 
 inline void level2(Bob& bob) {
-  // Move down
+  // Move down first
   bob.turn_right();
   bob.turn_right();
   bob.move();
@@ -30,7 +30,7 @@ inline void level2(Bob& bob) {
   bob.move();
   bob.move();
   bob.move();
-  // Move to the right
+  // Then move to the right
   bob.turn_left();
   bob.move();
   bob.move();

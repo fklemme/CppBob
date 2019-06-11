@@ -1,6 +1,7 @@
 #include "Game.hpp"
 
 #include <fstream>
+#include <optional>
 
 void window_handler(Game* game) {
   // Create window in thread
@@ -18,6 +19,7 @@ void window_handler(Game* game) {
     if (current_map != game->m_map) {
       current_map = game->m_map;
       if (current_map != nullptr) {
+        window.setTitle("CppBob - " + current_map->title());
         window.setSize(
             sf::Vector2u((unsigned)(Map::tile_size_x * current_map->width()),
                          (unsigned)(Map::tile_size_y * current_map->height())));
@@ -50,9 +52,7 @@ void window_handler(Game* game) {
   window.close();
 }
 
-Game::Game() : m_running(true) {
-  m_thread = std::make_unique<std::thread>(window_handler, this);
-}
+Game::Game() { m_thread = std::make_unique<std::thread>(window_handler, this); }
 
 Game::~Game() {
   // m_running = false;
@@ -63,18 +63,22 @@ void Game::load_map(const std::string& file_path) {
   // Throw away old bob, if any
   m_bob.reset();
 
-  // Load map data
+  // Load map data from file
   std::ifstream in(file_path);
+  std::optional<std::string> title;
   std::vector<std::vector<char>> map_data;
   for (std::string line; std::getline(in, line);) {
     if (line.empty()) continue;
-    if (line.substr(0, 2) == "//") continue;
-
-    map_data.emplace_back(line.begin(), line.end());
+    if (line.substr(0, 2) == "//" && !title) {
+      int start = 2;
+      while (start < line.size() && line[start] == ' ') ++start;
+      if (start < line.size()) title = line.substr(start);
+    } else
+      map_data.emplace_back(line.begin(), line.end());
   }
 
   // Create new map
-  m_map = std::make_shared<Map>(map_data);
+  m_map = std::make_shared<Map>(title ? *title : file_path, map_data);
 }
 
 std::shared_ptr<Bob> Game::get_bob() {
@@ -86,8 +90,11 @@ std::shared_ptr<Bob> Game::get_bob() {
 }
 
 void Game::check_state() {
+  if (!m_running) throw GameOver("Game has been stopped!");
+
   if (m_bob != nullptr) {
     const char pos_char = m_map->char_at(m_bob->position());
-    if (pos_char == 'd') throw GameOver("You won! :)");
+    if (pos_char == 'd')
+      throw GameOver("Bob reached the destination! Good job! :)");
   }
 }

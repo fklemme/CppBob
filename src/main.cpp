@@ -2,16 +2,16 @@
 
 #include "Game.hpp"
 
-// Steuere Bob zum Ziel!
+// Guide Bob to the destination!
 void strategy(Bob& bob) {
-  // Nach rechts laufen
+  // Move to the right
   bob.turn_right();
   bob.move();
   bob.move();
   bob.move();
   bob.move();
   bob.move();
-  // Dann nach unten laufen
+  // Then move down
   bob.turn_right();
   bob.move();
   bob.move();
@@ -21,15 +21,17 @@ void strategy(Bob& bob) {
 }
 
 int main() {
-  // Erstelle Spiel (zeichnet das Level)
+  // Create game and load map
   Game game;
-  // Lade Karte
   game.load_map("maps/level1.map");
-  // Platziere Bob
+  // Place Bob at starting location, returns a pointer
   auto bob = game.get_bob();
 
+  // Speed up game for bigger maps (smaller = faster)
+  // game.step_delay(Game::seconds(0.25f));
+
   try {
-    // Strategie ausführen
+    // Execute strategy that guides Bob to the destination
     strategy(*bob);
 
     std::cout << "Strategy ended without reaching destination. :(" << std::endl;
