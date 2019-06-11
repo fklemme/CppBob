@@ -100,4 +100,6 @@ inline void level5(Bob& bob) {
   }
 }
 
+inline void level6(Bob& bob) {}
+
 }  // namespace solutions
