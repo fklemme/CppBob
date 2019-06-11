@@ -55,7 +55,7 @@ void window_handler(Game* game) {
 Game::Game() { m_thread = std::make_unique<std::thread>(window_handler, this); }
 
 Game::~Game() {
-  // m_running = false;
+  m_running = false;
   m_thread->join();
 }
 
