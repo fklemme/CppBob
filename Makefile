@@ -30,7 +30,7 @@ $(BUILDDIR)/%.o: src/%.cpp
 	$(CXX) $(CXXFLAGS) -MMD -c -o $@ $<
 
 # Dependency handling
--include $(patsubst src/%.cpp,$(BUILDDIR)/%.d,$(wildcard src/*/*.cpp))
+-include $(patsubst src/%.cpp,$(BUILDDIR)/%.d,$(SOURCES))
 
 # Clean target
 PHONY: clean
@@ -42,10 +42,14 @@ clean:
 format:
 	clang-format -i -style=file $(HEADERS) $(SOURCES)
 
-# Clang Tidy - Removed some rules because...
-#   - cppcoreguidelines-pro-bounds-array-to-pointer-decay: "assert" brings up a lot of these warnings.
-#   - readability-braces-around-statements:                I don't like that rule. Let's ignore these.
+# Clang Tidy
+CHECKS := cppcoreguidelines-*,modernize-*,readability-*
+# Remove some unwanted checks
+CHECKS := $(CHECKS),-readability-braces-around-statements
+CHECKS := $(CHECKS),-readability-uppercase-literal-suffix
+# Magic numbers are fine for now
+CHECKS := $(CHECKS),-readability-magic-numbers
+CHECKS := $(CHECKS),-cppcoreguidelines-avoid-magic-numbers
 .PHONY: tidy
 tidy:
-	clang-tidy -checks=cppcoreguidelines-*,modernize-*,readability-*,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-readability-braces-around-statements \
-	           -header-filter="src/" $(SOURCES) -- $(CXXFLAGS)
+	clang-tidy -checks=$(CHECKS) -header-filter="src/" $(SOURCES) -- $(CXXFLAGS)
