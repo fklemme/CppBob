@@ -10,7 +10,7 @@ LDFLAGS  := -lsfml-graphics \
             -lsfml-window \
             -lpthread
 
-SOURCES := $(wildcard src/*.hpp)
+HEADERS := $(wildcard src/*.hpp)
 SOURCES := $(wildcard src/*.cpp)
 OBJECTS := $(patsubst src/%.cpp,$(BUILDDIR)/%.o,$(SOURCES))
 
@@ -41,3 +41,11 @@ clean:
 .PHONY: format
 format:
 	clang-format -i -style=file $(HEADERS) $(SOURCES)
+
+# Clang Tidy - Removed some rules because...
+#   - cppcoreguidelines-pro-bounds-array-to-pointer-decay: "assert" brings up a lot of these warnings.
+#   - readability-braces-around-statements:                I don't like that rule. Let's ignore these.
+.PHONY: tidy
+tidy:
+	clang-tidy -checks=cppcoreguidelines-*,modernize-*,readability-*,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-readability-braces-around-statements \
+	           -header-filter="src/" $(SOURCES) -- $(CXXFLAGS)
