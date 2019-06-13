@@ -70,7 +70,7 @@ void Game::load_map(const std::string& file_path) {
   for (std::string line; std::getline(in, line);) {
     if (line.empty()) continue;
     if (line.substr(0, 2) == "//" && !title) {
-      int start = 2;
+      std::size_t start = 2;
       while (start < line.size() && line[start] == ' ') ++start;
       if (start < line.size()) title = line.substr(start);
     } else
