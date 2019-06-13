@@ -10,7 +10,7 @@ void window_handler(Game* game) {
 
   while (game->m_running) {
     // Handle events
-    sf::Event event;
+    sf::Event event{};
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) game->m_running = false;
     }
@@ -52,7 +52,10 @@ void window_handler(Game* game) {
   window.close();
 }
 
-Game::Game() { m_thread = std::make_unique<std::thread>(window_handler, this); }
+Game::Game() {
+  m_thread = std::make_unique<std::thread>(window_handler, this);
+  m_context = std::make_unique<sf::Context>();
+}
 
 Game::~Game() {
   m_running = false;
@@ -70,7 +73,7 @@ void Game::load_map(const std::string& file_path) {
   for (std::string line; std::getline(in, line);) {
     if (line.empty()) continue;
     if (line.substr(0, 2) == "//" && !title) {
-      int start = 2;
+      std::size_t start = 2;
       while (start < line.size() && line[start] == ' ') ++start;
       if (start < line.size()) title = line.substr(start);
     } else
