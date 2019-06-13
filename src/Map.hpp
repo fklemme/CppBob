@@ -28,9 +28,8 @@ class Map {
   [[nodiscard]] inline const auto &sprite_map() const { return m_sprite_map; }
 
   [[nodiscard]] Position starting_position() const;
-  [[nodiscard]] inline char char_at(Position p) const {
-    return m_char_map[p.row][p.col];
-  }
+  [[nodiscard]] char tile(Position p) const;
+  void tile(Position p, char c);
 
  private:
   std::string m_title;

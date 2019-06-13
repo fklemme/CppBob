@@ -3,17 +3,6 @@
 #include "Game.hpp"
 #include "TextureCache.hpp"
 
-Bob::Bob(Game* game, std::shared_ptr<Map> map, Position starting_position)
-    : m_game(game),
-      m_map(std::move(map)),
-      m_position(starting_position),
-      m_orientation(Orientation::up) {
-  m_sprite.setTexture(TextureCache::instance().get(Texture::bob));
-  m_sprite.setOrigin(Map::tile_size_x / 2, Map::tile_size_y / 2);
-  m_sprite.setPosition((m_position.col + 0.5f) * Map::tile_size_x,
-                       (m_position.row + 0.5f) * Map::tile_size_y);
-}
-
 void Bob::move() {
   std::this_thread::sleep_for(m_game->step_delay());
 
@@ -52,6 +41,18 @@ void Bob::turn_left() {
   m_game->check_state();
 }
 
+void Bob::set_mark() {
+  std::this_thread::sleep_for(m_game->step_delay());
+  if (!on_marked_tile()) m_map->tile(m_position, 'm');
+  m_game->check_state();
+}
+
+void Bob::remove_mark() {
+  std::this_thread::sleep_for(m_game->step_delay());
+  if (on_marked_tile()) m_map->tile(m_position, '_');
+  m_game->check_state();
+}
+
 bool Bob::wall_in_front() const {
   auto target_position = m_position;
   if (m_orientation == Orientation::up) {
@@ -64,5 +65,18 @@ bool Bob::wall_in_front() const {
     ++target_position.col;
   }
 
-  return m_map->char_at(target_position) == 'w';
+  return m_map->tile(target_position) == 'w';
+}
+
+bool Bob::on_marked_tile() const { return m_map->tile(m_position) == 'm'; }
+
+Bob::Bob(Game* game, std::shared_ptr<Map> map, Position starting_position)
+    : m_game(game),
+      m_map(std::move(map)),
+      m_position(starting_position),
+      m_orientation(Orientation::up) {
+  m_sprite.setTexture(TextureCache::instance().get(Texture::bob));
+  m_sprite.setOrigin(Map::tile_size_x / 2, Map::tile_size_y / 2);
+  m_sprite.setPosition((m_position.col + 0.5f) * Map::tile_size_x,
+                       (m_position.row + 0.5f) * Map::tile_size_y);
 }
