@@ -3,17 +3,6 @@
 #include "Game.hpp"
 #include "TextureCache.hpp"
 
-Bob::Bob(Game* game, std::shared_ptr<Map> map, Position starting_position)
-    : m_game(game),
-      m_map(std::move(map)),
-      m_position(starting_position),
-      m_orientation(Orientation::up) {
-  m_sprite.setTexture(TextureCache::instance().get(Texture::bob));
-  m_sprite.setOrigin(Map::tile_size_x / 2, Map::tile_size_y / 2);
-  m_sprite.setPosition((m_position.col + 0.5f) * Map::tile_size_x,
-                       (m_position.row + 0.5f) * Map::tile_size_y);
-}
-
 void Bob::move() {
   std::this_thread::sleep_for(m_game->step_delay());
 
@@ -65,4 +54,15 @@ bool Bob::wall_in_front() const {
   }
 
   return m_map->char_at(target_position) == 'w';
+}
+
+Bob::Bob(Game* game, std::shared_ptr<Map> map, Position starting_position)
+    : m_game(game),
+      m_map(std::move(map)),
+      m_position(starting_position),
+      m_orientation(Orientation::up) {
+  m_sprite.setTexture(TextureCache::instance().get(Texture::bob));
+  m_sprite.setOrigin(Map::tile_size_x / 2, Map::tile_size_y / 2);
+  m_sprite.setPosition((m_position.col + 0.5f) * Map::tile_size_x,
+                       (m_position.row + 0.5f) * Map::tile_size_y);
 }
