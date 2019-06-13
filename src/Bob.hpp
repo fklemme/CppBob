@@ -28,6 +28,7 @@ class Bob {
 
   // Constructor, copy and move operations
   Bob(Game *game, std::shared_ptr<Map> map, Position starting_position);
+  ~Bob() = default;
   // Disallow copying
   Bob(const Bob &) = delete;
   Bob &operator=(const Bob &) = delete;
