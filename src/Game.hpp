@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <chrono>
+#include <exception>
 #include <memory>
 #include <string>
 #include <thread>
@@ -11,26 +12,25 @@
 
 class Game {
  public:
-  // Thread management in constructor / destructor
-  Game();
-  ~Game();
-
-  // Disallow copying a Game instance
-  Game(const Game &) = delete;
-  Game &operator=(const Game &) = delete;
-  // Moving should be fine
-  Game(Game &&) = default;
-  Game &operator=(Game &&) = default;
-
   void load_map(const std::string &file_path);
   [[nodiscard]] std::shared_ptr<Bob> get_bob();
-  void check_state();
+  void check_state();  // throws GameOver
 
   using seconds = std::chrono::duration<float>;  // float seconds
   [[nodiscard]] inline seconds step_delay() const { return m_step_delay; }
   inline void step_delay(seconds s) {
     if (s > seconds(0.0f)) m_step_delay = s;
   }
+
+  // Thread management in constructor / destructor
+  Game();
+  ~Game();
+  // Disallow copying a Game instance
+  Game(const Game &) = delete;
+  Game &operator=(const Game &) = delete;
+  // Moving should be fine
+  Game(Game &&) = default;
+  Game &operator=(Game &&) = default;
 
  private:
   // Handle drawing window in an own thread.

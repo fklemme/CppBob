@@ -52,16 +52,6 @@ void window_handler(Game* game) {
   window.close();
 }
 
-Game::Game() {
-  m_thread = std::make_unique<std::thread>(window_handler, this);
-  m_context = std::make_unique<sf::Context>();
-}
-
-Game::~Game() {
-  // m_running = false;
-  m_thread->join();
-}
-
 void Game::load_map(const std::string& file_path) {
   // Throw away old bob, if any
   m_bob.reset();
@@ -99,4 +89,14 @@ void Game::check_state() {
     if (m_map->tile(m_bob->position()) == 'd')
       throw GameOver("Bob reached the destination! Good job! :)");
   }
+}
+
+Game::Game() {
+  m_thread = std::make_unique<std::thread>(window_handler, this);
+  m_context = std::make_unique<sf::Context>();
+}
+
+Game::~Game() {
+  // m_running = false;
+  m_thread->join();
 }
