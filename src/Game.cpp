@@ -96,8 +96,7 @@ void Game::check_state() {
   if (!m_running) throw GameOver("Game has been stopped!");
 
   if (m_bob != nullptr) {
-    const char pos_char = m_map->char_at(m_bob->position());
-    if (pos_char == 'd')
+    if (m_map->tile(m_bob->position()) == 'd')
       throw GameOver("Bob reached the destination! Good job! :)");
   }
 }

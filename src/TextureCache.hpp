@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <map>
 
-enum class Texture { bob, empty, start, destination, wall };
+enum class Texture { bob, empty, start, destination, wall, mark };
 
 class TextureCache {
  public:

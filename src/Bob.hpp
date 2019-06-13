@@ -10,13 +10,16 @@ class Game;
 
 class Bob {
  public:
-  // Move instructions
+  // Actions
   void move();
   void turn_right();
   void turn_left();
+  void set_mark();
+  void remove_mark();
 
   // Sensor checks
   [[nodiscard]] bool wall_in_front() const;
+  [[nodiscard]] bool on_marked_tile() const;
 
   // Other information
   [[nodiscard]] inline const Position &position() const { return m_position; }

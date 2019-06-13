@@ -12,4 +12,5 @@ TextureCache::TextureCache() {
   m_textures[Texture::start].loadFromFile("images/start.png");
   m_textures[Texture::destination].loadFromFile("images/destination.png");
   m_textures[Texture::wall].loadFromFile("images/wall.png");
+  m_textures[Texture::mark].loadFromFile("images/mark.png");
 }
