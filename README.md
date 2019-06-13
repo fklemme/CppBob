@@ -7,3 +7,9 @@ Learn algorithmic thinking in C++
     # apt install libsfml-dev
     $ make
     $ ./bin/cppbob
+
+# Installation on Windows
+
+Download and install SFML from project website (https://www.sfml-dev.org)
+
+If you're using Visual Studio 2017, you can try using the `download_sfml.ps1` script instead. Prepared project files are located in the `vs_projects` folder.
