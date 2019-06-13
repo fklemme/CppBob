@@ -10,7 +10,7 @@ void window_handler(Game* game) {
 
   while (game->m_running) {
     // Handle events
-    sf::Event event;
+    sf::Event event{};
     while (window.pollEvent(event)) {
       if (event.type == sf::Event::Closed) game->m_running = false;
     }
@@ -52,7 +52,10 @@ void window_handler(Game* game) {
   window.close();
 }
 
-Game::Game() { m_thread = std::make_unique<std::thread>(window_handler, this); }
+Game::Game() {
+  m_thread = std::make_unique<std::thread>(window_handler, this);
+  m_context = std::make_unique<sf::Context>();
+}
 
 Game::~Game() {
   // m_running = false;
