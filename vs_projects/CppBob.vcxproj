@@ -170,11 +170,14 @@
     <None Include="..\maps\level3.map" />
     <None Include="..\maps\level4.map" />
     <None Include="..\maps\level5.map" />
+    <None Include="..\maps\level6.map" />
+    <None Include="..\maps\level7.map" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\images\bob.png" />
     <Image Include="..\images\destination.png" />
     <Image Include="..\images\empty.png" />
+    <Image Include="..\images\mark.png" />
     <Image Include="..\images\start.png" />
     <Image Include="..\images\wall.png" />
   </ItemGroup>

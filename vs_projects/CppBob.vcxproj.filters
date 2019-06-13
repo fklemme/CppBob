@@ -64,6 +64,12 @@
     <None Include="..\maps\level5.map">
       <Filter>Maps</Filter>
     </None>
+    <None Include="..\maps\level6.map">
+      <Filter>Maps</Filter>
+    </None>
+    <None Include="..\maps\level7.map">
+      <Filter>Maps</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\images\wall.png">
@@ -79,6 +85,9 @@
       <Filter>Textures</Filter>
     </Image>
     <Image Include="..\images\start.png">
+      <Filter>Textures</Filter>
+    </Image>
+    <Image Include="..\images\mark.png">
       <Filter>Textures</Filter>
     </Image>
   </ItemGroup>
