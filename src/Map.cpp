@@ -7,7 +7,7 @@
 #include "TextureCache.hpp"
 
 namespace {
-const std::vector<char> valid_chars = {'_', 's', 'd', 'w'};
+const std::vector<char> valid_chars = {'_', 's', 'd', 'w', 'm'};
 
 const sf::Texture &char_to_texture(char c) {
   switch (c) {
@@ -19,17 +19,19 @@ const sf::Texture &char_to_texture(char c) {
       return TextureCache::instance().get(Texture::destination);
     case 'w':
       return TextureCache::instance().get(Texture::wall);
+    case 'm':
+      return TextureCache::instance().get(Texture::mark);
     default:
       throw std::logic_error(std::string("Unknow map char: ") + c);
   }
 }
 }  // namespace
 
-Map::Map(const std::string &title, std::vector<std::vector<char>> &char_map)
-    : m_title(title), m_char_map(char_map) {
+Map::Map(std::string title, std::vector<std::vector<char>> char_map)
+    : m_title(std::move(title)), m_char_map(std::move(char_map)) {
   // --- Check map data ---
   // Check minimal size
-  if (m_char_map.size() < 1) throw std::logic_error("Empty map data!");
+  if (m_char_map.empty()) throw std::logic_error("Empty map data!");
   // Check valid chars
   for (auto &char_line : m_char_map) {
     for (char c : char_line) {
@@ -65,4 +67,21 @@ Position Map::starting_position() const {
     }
   }
   throw std::logic_error("No starting position in map!");
+}
+
+char Map::tile(Position p) const {
+  if (p.row >= height() || p.col >= width())
+    throw std::range_error("Position out of range!");
+
+  return m_char_map[p.row][p.col];
+}
+
+void Map::tile(Position p, char c) {
+  if (p.row >= height() || p.col >= width())
+    throw std::range_error("Position out of range!");
+  if (std::find(valid_chars.begin(), valid_chars.end(), c) == valid_chars.end())
+    throw std::logic_error(std::string("Illegal char: ") + c);
+
+  m_char_map[p.row][p.col] = c;
+  m_sprite_map[p.row][p.col].setTexture(char_to_texture(c));
 }
