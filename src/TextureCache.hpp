@@ -8,9 +8,7 @@ enum class Texture { bob, empty, start, destination, wall, mark };
 class TextureCache {
  public:
   [[nodiscard]] static TextureCache &instance();
-  [[nodiscard]] inline const sf::Texture &get(Texture t) const {
-    return m_textures.at(t);
-  }
+  [[nodiscard]] inline const sf::Texture &get(Texture t) const { return m_textures.at(t); }
 
  private:
   TextureCache();
