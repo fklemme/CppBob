@@ -10,15 +10,13 @@ void Bob::move() {
     if (m_orientation == Orientation::up && m_position.row > 0) {
       --m_position.row;
       m_sprite.move(0.0f, -Map::tile_size_y);
-    } else if (m_orientation == Orientation::down &&
-               m_position.row < m_map->height() - 1) {
+    } else if (m_orientation == Orientation::down && m_position.row < m_map->height() - 1) {
       ++m_position.row;
       m_sprite.move(0.0f, Map::tile_size_y);
     } else if (m_orientation == Orientation::left && m_position.col > 0) {
       --m_position.col;
       m_sprite.move(-Map::tile_size_x, 0.0f);
-    } else if (m_orientation == Orientation::right &&
-               m_position.col < m_map->width() - 1) {
+    } else if (m_orientation == Orientation::right && m_position.col < m_map->width() - 1) {
       ++m_position.col;
       m_sprite.move(Map::tile_size_x, 0.0f);
     }

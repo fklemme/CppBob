@@ -49,9 +49,7 @@ class Game {
 class GameOver : public std::exception {
  public:
   inline GameOver(std::string msg) : m_msg(std::move(msg)) {}
-  [[nodiscard]] inline const char *what() const noexcept override {
-    return m_msg.c_str();
-  }
+  [[nodiscard]] inline const char *what() const noexcept override { return m_msg.c_str(); }
 
  private:
   std::string m_msg;

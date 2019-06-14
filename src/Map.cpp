@@ -35,16 +35,14 @@ Map::Map(std::string title, std::vector<std::vector<char>> char_map)
   // Check valid chars
   for (auto &char_line : m_char_map) {
     for (char c : char_line) {
-      if (std::find(valid_chars.begin(), valid_chars.end(), c) ==
-          valid_chars.end())
+      if (std::find(valid_chars.begin(), valid_chars.end(), c) == valid_chars.end())
         throw std::logic_error(std::string("Illegal char in map data: ") + c);
     }
   }
   // Check dimensions
   const auto row_length = m_char_map[0].size();
   for (auto &line : m_char_map) {
-    if (line.size() != row_length)
-      throw std::logic_error("Inconsistent line lengths in map data!");
+    if (line.size() != row_length) throw std::logic_error("Inconsistent line lengths in map data!");
   }
 
   // Create sprite map
@@ -70,15 +68,13 @@ Position Map::starting_position() const {
 }
 
 char Map::tile(Position p) const {
-  if (p.row >= height() || p.col >= width())
-    throw std::range_error("Position out of range!");
+  if (p.row >= height() || p.col >= width()) throw std::range_error("Position out of range!");
 
   return m_char_map[p.row][p.col];
 }
 
 void Map::tile(Position p, char c) {
-  if (p.row >= height() || p.col >= width())
-    throw std::range_error("Position out of range!");
+  if (p.row >= height() || p.col >= width()) throw std::range_error("Position out of range!");
   if (std::find(valid_chars.begin(), valid_chars.end(), c) == valid_chars.end())
     throw std::logic_error(std::string("Illegal char: ") + c);
 

@@ -7,6 +7,13 @@
 struct Position {
   std::size_t row;
   std::size_t col;
+
+  [[nodiscard]] inline bool operator==(const Position &that) const {
+    return row == that.row && col == that.col;
+  }
+  [[nodiscard]] inline bool operator!=(const Position &that) const {
+    return row != that.row || col != that.col;
+  }
 };
 
 class Map {
@@ -18,12 +25,8 @@ class Map {
   Map(std::string title, std::vector<std::vector<char>> char_map);
 
   [[nodiscard]] inline const std::string &title() const { return m_title; }
-  [[nodiscard]] inline std::size_t height() const {
-    return m_sprite_map.size();
-  }
-  [[nodiscard]] inline std::size_t width() const {
-    return m_sprite_map[0].size();
-  }
+  [[nodiscard]] inline std::size_t height() const { return m_sprite_map.size(); }
+  [[nodiscard]] inline std::size_t width() const { return m_sprite_map[0].size(); }
   [[nodiscard]] inline const auto &char_map() const { return m_char_map; }
   [[nodiscard]] inline const auto &sprite_map() const { return m_sprite_map; }
 

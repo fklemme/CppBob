@@ -26,22 +26,18 @@ void window_handler(Game* game) {
         const float max_height = desktop.height * 0.8f;
         float target_width = Map::tile_size_x * current_map->width();
         float target_height = Map::tile_size_y * current_map->height();
-        float scale_ratio =
-            std::min(max_width / target_width, max_height / target_height);
+        float scale_ratio = std::min(max_width / target_width, max_height / target_height);
         if (scale_ratio < 1.0f) {
           // Scale down, keeping aspect ratio
           target_width = target_width * scale_ratio;
           target_height = target_height * scale_ratio;
         }
         // Update size and position
-        window.setSize(
-            sf::Vector2u((unsigned)target_width, (unsigned)target_height));
-        window.setPosition(
-            sf::Vector2i((int)((desktop.width - target_width) / 2),
-                         (int)((desktop.height - target_height) / 2)));
+        window.setSize(sf::Vector2u((unsigned)target_width, (unsigned)target_height));
+        window.setPosition(sf::Vector2i((int)((desktop.width - target_width) / 2),
+                                        (int)((desktop.height - target_height) / 2)));
         // Update view
-        sf::View view(sf::FloatRect(0.0f, 0.0f,
-                                    Map::tile_size_x * current_map->width(),
+        sf::View view(sf::FloatRect(0.0f, 0.0f, Map::tile_size_x * current_map->width(),
                                     Map::tile_size_y * current_map->height()));
         window.setView(view);
       }
