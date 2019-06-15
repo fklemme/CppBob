@@ -27,18 +27,48 @@ const sf::Texture &char_to_texture(char c) {
 }
 }  // namespace
 
+char Map::tile(std::size_t row, std::size_t col) const {
+  if (row >= height() || col >= width()) throw std::range_error("Position out of range!");
+
+  return m_char_map[row][col];
+}
+
+char Map::tile(const Position &p) const { return tile(p.row, p.col); }
+
+void Map::tile(std::size_t row, std::size_t col, char c) {
+  if (row >= height() || col >= width()) throw std::range_error("Position out of range!");
+
+  if (std::find(valid_chars.begin(), valid_chars.end(), c) == valid_chars.end())
+    throw std::logic_error(std::string("Illegal character: ") + c);
+
+  m_char_map[row][col] = c;
+  m_sprite_map[row][col].setTexture(char_to_texture(c));
+}
+
+void Map::tile(const Position &p, char c) { tile(p.row, p.col, c); }
+
+Position Map::starting_position() const {
+  for (std::size_t row = 0; row < height(); ++row) {
+    for (std::size_t col = 0; col < width(); ++col) {
+      if (m_char_map[row][col] == 's') return {row, col};
+    }
+  }
+  throw std::logic_error("No starting position in map!");
+}
+
 Map::Map(std::string title, std::vector<std::vector<char>> char_map)
     : m_title(std::move(title)), m_char_map(std::move(char_map)) {
-  // --- Check map data ---
   // Check minimal size
   if (m_char_map.empty()) throw std::logic_error("Empty map data!");
+
   // Check valid chars
   for (auto &char_line : m_char_map) {
     for (char c : char_line) {
       if (std::find(valid_chars.begin(), valid_chars.end(), c) == valid_chars.end())
-        throw std::logic_error(std::string("Illegal char in map data: ") + c);
+        throw std::logic_error(std::string("Illegal character in map data: ") + c);
     }
   }
+
   // Check dimensions
   const auto row_length = m_char_map[0].size();
   for (auto &line : m_char_map) {
@@ -56,28 +86,4 @@ Map::Map(std::string title, std::vector<std::vector<char>> char_map)
       m_sprite_map[row].push_back(std::move(tile));
     }
   }
-}
-
-Position Map::starting_position() const {
-  for (std::size_t row = 0; row < height(); ++row) {
-    for (std::size_t col = 0; col < width(); ++col) {
-      if (m_char_map[row][col] == 's') return {row, col};
-    }
-  }
-  throw std::logic_error("No starting position in map!");
-}
-
-char Map::tile(Position p) const {
-  if (p.row >= height() || p.col >= width()) throw std::range_error("Position out of range!");
-
-  return m_char_map[p.row][p.col];
-}
-
-void Map::tile(Position p, char c) {
-  if (p.row >= height() || p.col >= width()) throw std::range_error("Position out of range!");
-  if (std::find(valid_chars.begin(), valid_chars.end(), c) == valid_chars.end())
-    throw std::logic_error(std::string("Illegal char: ") + c);
-
-  m_char_map[p.row][p.col] = c;
-  m_sprite_map[p.row][p.col].setTexture(char_to_texture(c));
 }
