@@ -14,3 +14,8 @@ std::size_t distance(const Position &a, const Position &b) {
   std::size_t col_dist = a.col > b.col ? a.col - b.col : b.col - a.col;
   return row_dist + col_dist;
 }
+
+std::ostream &operator<<(std::ostream &out, const Position &p) {
+  out << "(Row: " << p.row << ", Col: " << p.col << ")";
+  return out;
+}

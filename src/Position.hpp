@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstddef>
+#include <ostream>
 
 // Represents a position on the map.
 struct Position {
@@ -16,3 +16,5 @@ struct Position {
 };
 
 [[nodiscard]] std::size_t distance(const Position &a, const Position &b);
+
+std::ostream &operator<<(std::ostream &out, const Position &p);
