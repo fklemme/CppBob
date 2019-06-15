@@ -25,8 +25,8 @@ int main() {
   for (auto& [map, strategy] : levels) {
     try {
       game.load_map(map);
-      auto bob = game.get_bob();
-      strategy(*bob);
+      auto bob_ptr = game.place_bob();
+      strategy(*bob_ptr);
     } catch (GameOver& e) {
       std::cout << "Game over on " + map + "!\n" << e.what() << std::endl;
     }
