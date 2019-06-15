@@ -269,9 +269,11 @@ inline void level8(Bob& bob) {
 }
 
 inline void level9(Bob& bob) {
+  constexpr bool debug_visualize = false;
+
   auto& map = *bob.map();
   Position start = bob.position();
-  Position destination{map.height(), map.width()};  // initial off map
+  Position destination{map.height(), map.width()};  // initially off map
 
   // Find destination "d"
   for (std::size_t row = 0; row < map.height(); ++row) {
@@ -320,16 +322,18 @@ inline void level9(Bob& bob) {
       break;
     }
 
-    // Mark current position for visualization (debugging)
-    const_cast<Map&>(map).tile(current, 'm');
-    std::this_thread::sleep_for(std::chrono::milliseconds(250));
+    if constexpr (debug_visualize) {
+      // Mark current position for visualization (debugging)
+      const_cast<Map&>(map).tile(current, 'm');
+      std::this_thread::sleep_for(std::chrono::milliseconds(250));
+    }
 
     // Add ajecent positions that are not already checked
     Position up{current.row - 1, current.col};
     Position down{current.row + 1, current.col};
     Position left{current.row, current.col - 1};
     Position right{current.row, current.col + 1};
-    for (Position p : {up, down, left, right}) {
+    for (auto& p : {up, down, left, right}) {
       // TODO: Add boundary checks
       if (map.tile(p) != 'w' && predecessors.count(p) == 0) {
         positions.push(p);
@@ -338,7 +342,53 @@ inline void level9(Bob& bob) {
     }
   }  // end of path finding
 
-  // TODO: follow route
+  if constexpr (debug_visualize) {
+    // Clear all marks
+    for (std::size_t row = 0; row < map.height(); ++row) {
+      for (std::size_t col = 0; col < map.width(); ++col) {
+        if (map.tile(row, col) == 'm') const_cast<Map&>(map).tile(row, col, '_');
+      }
+    }
+
+    // Visualize route with marks
+    auto mark_route = dest_route;
+    mark_route.pop_back();  // don't override the destination itself
+    for (auto& p : mark_route) const_cast<Map&>(map).tile(p, 'm');
+  }
+
+  // Follow the route to destination
+  for (auto& p : dest_route) {
+    // We should never need to turn around, so ignore this case
+    if (p.row == bob.position().row - 1) {
+      // Move up: Face up and move
+      if (bob.orientation() == Orientation::left)
+        bob.turn_right();
+      else if (bob.orientation() == Orientation::right)
+        bob.turn_left();
+      bob.move();
+    } else if (p.row == bob.position().row + 1) {
+      // Move down: Face down and move
+      if (bob.orientation() == Orientation::left)
+        bob.turn_left();
+      else if (bob.orientation() == Orientation::right)
+        bob.turn_right();
+      bob.move();
+    } else if (p.col == bob.position().col - 1) {
+      // Move left: Face left and move
+      if (bob.orientation() == Orientation::up)
+        bob.turn_left();
+      else if (bob.orientation() == Orientation::down)
+        bob.turn_right();
+      bob.move();
+    } else /* p.col == bob.position().col + 1 */ {
+      // Move right: Face right and move
+      if (bob.orientation() == Orientation::up)
+        bob.turn_right();
+      else if (bob.orientation() == Orientation::down)
+        bob.turn_left();
+      bob.move();
+    }
+  }
 }
 
 }  // namespace solutions
