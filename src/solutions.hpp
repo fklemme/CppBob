@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <map>
@@ -267,73 +268,77 @@ inline void level8(Bob& bob) {
   }
 }
 
-// Helpers for level9
-std::size_t distance(const Position& a, const Position& b) {
-  std::size_t row_dist = a.row > b.row ? a.row - b.row : b.row - a.row;
-  std::size_t col_dist = a.col > b.col ? a.col - b.col : b.col - a.col;
-  return row_dist + col_dist;
-}
-
-bool operator<(const Position& a, const Position& b) {
-  if (a.row != b.row) return a.row < b.row;
-  if (a.row == b.row) return a.col < b.col;
-}
-
 inline void level9(Bob& bob) {
   auto& map = *bob.map();
   Position start = bob.position();
-  Position destination{map.width(), map.height()};  // initial off map
+  Position destination{map.height(), map.width()};  // initial off map
 
   // Find destination "d"
-  for (std::size_t row = 0; row < map.width(); ++row) {
-    for (std::size_t col = 0; col < map.height(); ++col) {
+  for (std::size_t row = 0; row < map.height(); ++row) {
+    for (std::size_t col = 0; col < map.width(); ++col) {
       if (map.tile(row, col) == 'd') destination = {row, col};
     }
   }
-  assert(destination.row < map.width() && destination.col < map.height());
+  assert(destination.row < map.height() && destination.col < map.width());
 
   // --- Find path from start to destination ---
   // Compare function to get nearest Position to destination in priority queue
   auto dist_compare = [&destination](const Position& a, const Position& b) {
-    return distance(a, destination) < distance(b, destination);
+    return distance(a, destination) > distance(b, destination);
   };
   // Positions to check next
   std::priority_queue<Position, std::vector<Position>, decltype(dist_compare)> positions(
       dist_compare);
   // Checked positions, and how did we get there?
   std::map<Position, Position> predecessors;
+  predecessors.emplace(start, start);  // let start be its own predecessor, used later
 
   // Add start as first position to check
   positions.push(start);
 
+  // Route to destination
+  std::vector<Position> dest_route;
+
   // Path finding algorithm
   while (!positions.empty()) {
+    // Check next position in queue
     Position current = positions.top();
     positions.pop();
 
+    // If we reached the destination...
     if (current == destination) {
-      // Reached destination
-      // TODO
+      // Build route backwards from destination to start
+      Position p = current;
+      // Only for start, its predecessor will be itself
+      while (p != predecessors[p]) {
+        dest_route.push_back(p);
+        p = predecessors[p];
+      }
+      // Reverse order: Now from start to destination (start itself is not in route)
+      std::reverse(dest_route.begin(), dest_route.end());
+      // End path finding!
       break;
     }
 
     // Mark current position for visualization (debugging)
     const_cast<Map&>(map).tile(current, 'm');
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::this_thread::sleep_for(std::chrono::milliseconds(250));
 
     // Add ajecent positions that are not already checked
-    Position up{current.row, current.col - 1};
-    Position down{current.row, current.col + 1};
-    Position left{current.row - 1, current.col};
-    Position right{current.row + 1, current.col};
+    Position up{current.row - 1, current.col};
+    Position down{current.row + 1, current.col};
+    Position left{current.row, current.col - 1};
+    Position right{current.row, current.col + 1};
     for (Position p : {up, down, left, right}) {
       // TODO: Add boundary checks
-      if (map.tile(up) != 'w' && predecessors.count(up) == 0) {
-        positions.push(up);
-        predecessors.emplace(up, current);
+      if (map.tile(p) != 'w' && predecessors.count(p) == 0) {
+        positions.push(p);
+        predecessors.emplace(p, current);
       }
     }
-  }
+  }  // end of path finding
+
+  // TODO: follow route
 }
 
 }  // namespace solutions
