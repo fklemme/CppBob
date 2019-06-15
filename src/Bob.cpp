@@ -53,15 +53,14 @@ void Bob::remove_mark() {
 
 bool Bob::wall_in_front() const {
   auto target_position = m_position;
-  if (m_orientation == Orientation::up) {
+  if (m_orientation == Orientation::up)
     --target_position.row;
-  } else if (m_orientation == Orientation::down) {
+  else if (m_orientation == Orientation::down)
     ++target_position.row;
-  } else if (m_orientation == Orientation::left) {
+  else if (m_orientation == Orientation::left)
     --target_position.col;
-  } else /* m_orientation == Orientation::right */ {
+  else  // m_orientation == Orientation::right
     ++target_position.col;
-  }
 
   return m_map->tile(target_position) == 'w';
 }
@@ -77,4 +76,16 @@ Bob::Bob(Game* game, std::shared_ptr<Map> map, Position starting_position)
   m_sprite.setOrigin(Map::tile_size_x / 2, Map::tile_size_y / 2);
   m_sprite.setPosition((m_position.col + 0.5f) * Map::tile_size_x,
                        (m_position.row + 0.5f) * Map::tile_size_y);
+}
+
+std::ostream& operator<<(std::ostream& out, Orientation o) {
+  if (o == Orientation::up)
+    out << "up";
+  else if (o == Orientation::right)
+    out << "right";
+  else if (o == Orientation::down)
+    out << "down";
+  else  // o == Orientation::left
+    out << "left";
+  return out;
 }

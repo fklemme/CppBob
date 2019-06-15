@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <ostream>
 
 #include "Map.hpp"
 
@@ -68,3 +69,5 @@ class Bob {
   Orientation m_orientation;
   sf::Sprite m_sprite;
 };
+
+std::ostream &operator<<(std::ostream &out, Orientation o);
