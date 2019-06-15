@@ -20,6 +20,7 @@ int main() {
   levels.emplace_back("maps/level6.map", solutions::level6);
   levels.emplace_back("maps/level7.map", solutions::level7);
   levels.emplace_back("maps/level8.map", solutions::level8);
+  levels.emplace_back("maps/level9.map", solutions::level9);
 
   // Load and run level after level
   for (auto& [map, strategy] : levels) {
