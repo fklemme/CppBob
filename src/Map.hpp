@@ -4,18 +4,7 @@
 #include <string>
 #include <vector>
 
-// Represents a position on the map.
-struct Position {
-  std::size_t row;
-  std::size_t col;
-
-  [[nodiscard]] inline bool operator==(const Position &that) const {
-    return row == that.row && col == that.col;
-  }
-  [[nodiscard]] inline bool operator!=(const Position &that) const {
-    return row != that.row || col != that.col;
-  }
-};
+#include "Position.hpp"
 
 // The game map
 class Map {
