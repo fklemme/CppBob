@@ -156,12 +156,14 @@
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Map.cpp" />
+    <ClCompile Include="..\src\Position.cpp" />
     <ClCompile Include="..\src\TextureCache.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\Bob.hpp" />
     <ClInclude Include="..\src\Game.hpp" />
     <ClInclude Include="..\src\Map.hpp" />
+    <ClInclude Include="..\src\Position.hpp" />
     <ClInclude Include="..\src\solutions.hpp" />
     <ClInclude Include="..\src\TextureCache.hpp" />
   </ItemGroup>
