@@ -18,10 +18,10 @@ class Bob {
   // Moves Bob one tile in the facing direction.
   void move();
 
-  // Turns Bob right in a 90° angle.
+  // Turns Bob right in a 90 degree angle.
   void turn_right();
 
-  // Turns Bob left in a 90° angle.
+  // Turns Bob left in a 90 degree angle.
   void turn_left();
 
   // Marks the tile at Bob's current location.
