@@ -28,14 +28,14 @@ void Bob::move() {
 void Bob::turn_right() {
   std::this_thread::sleep_for(m_game->step_delay());
   m_orientation = (Orientation)((m_orientation + 1) % 4);
-  m_sprite.setRotation(90.0f * (float)m_orientation);
+  m_sprite.setRotation(90.0f * m_orientation);
   m_game->check_state();
 }
 
 void Bob::turn_left() {
   std::this_thread::sleep_for(m_game->step_delay());
   m_orientation = (Orientation)((m_orientation + 3) % 4);
-  m_sprite.setRotation(90.0f * (float)m_orientation);
+  m_sprite.setRotation(90.0f * m_orientation);
   m_game->check_state();
 }
 

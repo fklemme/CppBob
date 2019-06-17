@@ -33,9 +33,9 @@ void window_handler(Game* game) {
           target_height = target_height * scale_ratio;
         }
         // Update size and position
-        window.setSize(sf::Vector2u((unsigned)target_width, (unsigned)target_height));
-        window.setPosition(sf::Vector2i((int)((desktop.width - target_width) / 2),
-                                        (int)((desktop.height - target_height) / 2)));
+        window.setSize(sf::Vector2u(target_width, target_height));
+        window.setPosition(
+            sf::Vector2i((desktop.width - target_width) / 2, (desktop.height - target_height) / 2));
         // Update view
         sf::View view(sf::FloatRect(0.0f, 0.0f, Map::tile_size_x * current_map->width(),
                                     Map::tile_size_y * current_map->height()));
