@@ -269,6 +269,7 @@ inline void level8(Bob& bob) {
 }
 
 inline void level9(Bob& bob) {
+  // Visualize path finding algorithm with marks on the map
   constexpr bool debug_visualize = false;
 
   auto& map = *bob.map();
@@ -282,6 +283,15 @@ inline void level9(Bob& bob) {
     }
   }
   assert(destination.row < map.height() && destination.col < map.width());
+
+  if constexpr (debug_visualize) {
+    // Clear all marks that are initially on the map
+    for (std::size_t row = 0; row < map.height(); ++row) {
+      for (std::size_t col = 0; col < map.width(); ++col) {
+        if (map.tile(row, col) == 'm') const_cast<Map&>(map).tile(row, col, '_');
+      }
+    }
+  }
 
   // --- Find path from start to destination ---
   // Compare function to get nearest Position to destination in priority queue
@@ -343,7 +353,7 @@ inline void level9(Bob& bob) {
   }  // end of path finding
 
   if constexpr (debug_visualize) {
-    // Clear all marks
+    // Clear all marks, again
     for (std::size_t row = 0; row < map.height(); ++row) {
       for (std::size_t col = 0; col < map.width(); ++col) {
         if (map.tile(row, col) == 'm') const_cast<Map&>(map).tile(row, col, '_');
@@ -358,36 +368,27 @@ inline void level9(Bob& bob) {
 
   // Follow the route to destination
   for (auto& p : dest_route) {
-    // We should never need to turn around, so ignore this case
-    if (p.row == bob.position().row - 1) {
-      // Move up: Face up and move
-      if (bob.orientation() == Orientation::left)
+    // Figure out target direction
+    Orientation target_direction;
+    if (p.row == bob.position().row - 1)
+      target_direction = Orientation::up;
+    else if (p.row == bob.position().row + 1)
+      target_direction = Orientation::down;
+    else if (p.col == bob.position().col - 1)
+      target_direction = Orientation::left;
+    else
+      target_direction = Orientation::right;
+
+    // Rotate Bob accordingly
+    while (bob.orientation() != target_direction) {
+      if ((bob.orientation() + 1) % 4 == target_direction)
         bob.turn_right();
-      else if (bob.orientation() == Orientation::right)
+      else
         bob.turn_left();
-      bob.move();
-    } else if (p.row == bob.position().row + 1) {
-      // Move down: Face down and move
-      if (bob.orientation() == Orientation::left)
-        bob.turn_left();
-      else if (bob.orientation() == Orientation::right)
-        bob.turn_right();
-      bob.move();
-    } else if (p.col == bob.position().col - 1) {
-      // Move left: Face left and move
-      if (bob.orientation() == Orientation::up)
-        bob.turn_left();
-      else if (bob.orientation() == Orientation::down)
-        bob.turn_right();
-      bob.move();
-    } else /* p.col == bob.position().col + 1 */ {
-      // Move right: Face right and move
-      if (bob.orientation() == Orientation::up)
-        bob.turn_right();
-      else if (bob.orientation() == Orientation::down)
-        bob.turn_left();
-      bob.move();
     }
+
+    // Move one step
+    bob.move();
   }
 }
 
