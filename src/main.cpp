@@ -8,19 +8,32 @@
 int main() {
   // Create game and set high speed
   Game game;
-  game.step_delay(Game::seconds(0.1f));
+  game.step_delay(Game::seconds(0.25f));
 
   // Levels and their strategy functions
+  const bool test_respective_solution = false;
   std::vector<std ::pair<std::string, std::function<void(Bob&)>>> levels;
-  levels.emplace_back("maps/level1.map", solutions::level1);
-  levels.emplace_back("maps/level2.map", solutions::level2);
-  levels.emplace_back("maps/level3.map", solutions::level3);
-  levels.emplace_back("maps/level4.map", solutions::level4);
-  levels.emplace_back("maps/level5.map", solutions::level5);
-  levels.emplace_back("maps/level6.map", solutions::level6);
-  levels.emplace_back("maps/level7.map", solutions::level7);
-  levels.emplace_back("maps/level8.map", solutions::level8);
-  levels.emplace_back("maps/level9.map", solutions::level9);
+  if (test_respective_solution) {
+    levels.emplace_back("maps/level1.map", solutions::level1);
+    levels.emplace_back("maps/level2.map", solutions::level2);
+    levels.emplace_back("maps/level3.map", solutions::level3);
+    levels.emplace_back("maps/level4.map", solutions::level4);
+    levels.emplace_back("maps/level5.map", solutions::level5);
+    levels.emplace_back("maps/level6.map", solutions::level6);
+    levels.emplace_back("maps/level7.map", solutions::level7);
+    levels.emplace_back("maps/level8.map", solutions::level8);
+    levels.emplace_back("maps/level9.map", solutions::level9);
+  } else /* always solution for level 9 */ {
+    levels.emplace_back("maps/level1.map", solutions::level9);
+    levels.emplace_back("maps/level2.map", solutions::level9);
+    levels.emplace_back("maps/level3.map", solutions::level9);
+    levels.emplace_back("maps/level4.map", solutions::level9);
+    levels.emplace_back("maps/level5.map", solutions::level9);
+    levels.emplace_back("maps/level6.map", solutions::level9);
+    levels.emplace_back("maps/level7.map", solutions::level9);
+    levels.emplace_back("maps/level8.map", solutions::level9);
+    levels.emplace_back("maps/level9.map", solutions::level9);
+  }
 
   // Load and run level after level
   for (auto& [map, strategy] : levels) {

@@ -270,7 +270,8 @@ inline void level8(Bob& bob) {
 
 inline void level9(Bob& bob) {
   // Visualize path finding algorithm with marks on the map
-  constexpr bool debug_visualize = false;
+  constexpr bool debug_visualize = true;
+  const auto debug_step_delay = std::chrono::milliseconds(250);
 
   auto& map = *bob.map();
   Position start = bob.position();
@@ -335,7 +336,7 @@ inline void level9(Bob& bob) {
     if constexpr (debug_visualize) {
       // Mark current position for visualization (debugging)
       const_cast<Map&>(map).tile(current, 'm');
-      std::this_thread::sleep_for(std::chrono::milliseconds(250));
+      std::this_thread::sleep_for(debug_step_delay);
     }
 
     // Add ajecent positions that are not already checked
