@@ -11,9 +11,9 @@ int main() {
   game.step_delay(Game::seconds(0.25f));
 
   // Levels and their strategy functions
-  const bool test_respective_solution = false;
+  const bool use_respective_solution = true;
   std::vector<std ::pair<std::string, std::function<void(Bob&)>>> levels;
-  if (test_respective_solution) {
+  if (use_respective_solution) {
     levels.emplace_back("maps/level1.map", solutions::level1);
     levels.emplace_back("maps/level2.map", solutions::level2);
     levels.emplace_back("maps/level3.map", solutions::level3);
@@ -23,7 +23,7 @@ int main() {
     levels.emplace_back("maps/level7.map", solutions::level7);
     levels.emplace_back("maps/level8.map", solutions::level8);
     levels.emplace_back("maps/level9.map", solutions::level9);
-  } else /* always solution for level 9 */ {
+  } else /* always use generic solution for level 9 */ {
     levels.emplace_back("maps/level1.map", solutions::level9);
     levels.emplace_back("maps/level2.map", solutions::level9);
     levels.emplace_back("maps/level3.map", solutions::level9);
