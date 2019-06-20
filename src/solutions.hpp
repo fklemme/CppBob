@@ -273,11 +273,11 @@ constexpr bool debug_visualize = true;
 const auto debug_step_delay = std::chrono::milliseconds(250);
 
 // Based on https://en.wikipedia.org/wiki/A*_search_algorithm#Pseudocode
-std::vector<Position> reconstruct_path(const std::map<Position, Position>& cameFrom,
+std::vector<Position> reconstruct_path(const std::map<Position, Position>& came_from,
                                        Position current) {
   std::vector<Position> total_path = {current};
-  while (cameFrom.count(current)) {
-    current = cameFrom.at(current);
+  while (came_from.count(current)) {
+    current = came_from.at(current);
     total_path.push_back(current);
   }
   std::reverse(total_path.begin(), total_path.end());  // start to goal
@@ -285,49 +285,49 @@ std::vector<Position> reconstruct_path(const std::map<Position, Position>& cameF
 }
 
 // Based on https://en.wikipedia.org/wiki/A*_search_algorithm#Pseudocode
-std::vector<Position> A_Star(const Map& map, const Position& start, const Position& goal) {
+std::vector<Position> a_star(const Map& map, const Position& start, const Position& goal) {
   // Can be used as "Infinity"
   const int max_distance = map.height() * map.width();
 
   // The set of nodes already evaluated
-  std::set<Position> closedSet;
+  std::set<Position> closed;
 
   // The set of currently discovered nodes that are not evaluated yet.
   // Initially, only the start node is known.
-  std::set<Position> openSet = {start};  // TODO: use priority queue
+  std::set<Position> open = {start};  // TODO: use priority queue
 
   // For each node, which node it can most efficiently be reached from.
-  // If a node can be reached from many nodes, cameFrom will eventually
+  // If a node can be reached from many nodes, came_from will eventually
   // contain the most efficient previous step.
-  std::map<Position, Position> cameFrom;
+  std::map<Position, Position> came_from;
 
   // For each node, the cost of getting from the start node to that node.
-  std::map<Position, int> gScore;  // default value of Infinity
+  std::map<Position, int> g_score;  // default value of max_distance
 
   // The cost of going from start to start is zero.
-  gScore[start] = 0;
+  g_score[start] = 0;
 
   // For each node, the total cost of getting from the start node to the goal
   // by passing by that node. That value is partly known, partly heuristic.
-  std::map<Position, int> fScore;  // default value of Infinity
+  std::map<Position, int> f_score;  // default value of max_distance
 
   // For the first node, that value is completely heuristic.
-  fScore[start] = distance(start, goal);
+  f_score[start] = distance(start, goal);
 
-  // Helper to get "Infinity" as default when accessing a map
+  // Helper to get max_distance as default when accessing a map
   auto get = [&max_distance](auto& map, const Position& p) {
     if (!map.count(p)) map.emplace(p, max_distance);
     return map[p];
   };
 
-  while (!openSet.empty()) {
-    // current := the node in openSet having the lowest fScore[] value
+  while (!open.empty()) {
+    // current := the node in open having the lowest f_score[] value
     auto current = *std::min_element(
-        // openSet.begin(), openSet.end(), // breadth first
-        openSet.rbegin(), openSet.rend(),  // depth first
-        [&](const Position& a, const Position& b) { return get(fScore, a) < get(fScore, b); });
+        // open.begin(), open.end(), // breadth first
+        open.rbegin(), open.rend(),  // depth first
+        [&](const Position& a, const Position& b) { return get(f_score, a) < get(f_score, b); });
 
-    if (current == goal) return reconstruct_path(cameFrom, current);
+    if (current == goal) return reconstruct_path(came_from, current);
 
     if constexpr (debug_visualize) {
       // Mark current position for visualization (debugging)
@@ -335,8 +335,8 @@ std::vector<Position> A_Star(const Map& map, const Position& start, const Positi
       std::this_thread::sleep_for(debug_step_delay);
     }
 
-    openSet.erase(current);
-    closedSet.insert(current);
+    open.erase(current);
+    closed.insert(current);
 
     // Neighbors of current
     Position up{current.row - 1, current.col};
@@ -346,20 +346,20 @@ std::vector<Position> A_Star(const Map& map, const Position& start, const Positi
     for (auto& neighbor : {up, down, left, right}) {
       if (map.tile(neighbor) == 'w') continue;  // Neighbor is wall and cannot be moved to
 
-      if (closedSet.count(neighbor)) continue;  // Ignore the neighbor which is already evaluated
+      if (closed.count(neighbor)) continue;  // Ignore the neighbor which is already evaluated
 
       // The distance from start to a neighbor
-      const int tentative_gScore = get(gScore, current) + 1;
+      const int tentative_g_score = get(g_score, current) + 1;
 
-      if (!openSet.count(neighbor))  // Discover a new node
-        openSet.insert(neighbor);
-      else if (tentative_gScore >= get(gScore, neighbor))
-        continue;
+      if (!open.count(neighbor))
+        open.insert(neighbor);  // Discovered a new node
+      else if (tentative_g_score >= get(g_score, neighbor))
+        continue;  // Already discovered and current path is not better
 
       // This path is the best until now. Record it!
-      cameFrom[neighbor] = current;
-      gScore[neighbor] = tentative_gScore;
-      fScore[neighbor] = tentative_gScore + distance(neighbor, goal);
+      came_from[neighbor] = current;
+      g_score[neighbor] = tentative_g_score;
+      f_score[neighbor] = tentative_g_score + distance(neighbor, goal);
     }
   }
 
@@ -389,7 +389,7 @@ inline void level9(Bob& bob) {
   }
 
   // Use path finding algorithm to find best path to destination
-  auto route = A_Star(map, start, destination);
+  auto route = a_star(map, start, destination);
 
   if constexpr (debug_visualize) {
     // Clear all marks, again
@@ -406,7 +406,7 @@ inline void level9(Bob& bob) {
   }
 
   // Follow the route to destination
-  route.erase(route.begin());  // ignore first position: Bob is on that tile
+  route.erase(route.begin());  // ignore first position, Bob is already on that tile
   for (auto& postion : route) {
     // Figure out target direction
     Orientation target_direction;
@@ -427,7 +427,7 @@ inline void level9(Bob& bob) {
         bob.turn_left();
     }
 
-    // Move one step
+    // Move to position
     bob.move();
   }
 }
