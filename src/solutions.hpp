@@ -111,44 +111,35 @@ inline void level6(Bob& bob) {
   auto try_move_left = [&]() {
     bob.turn_left();
     bob.move();
-    if (bob.on_marked_tile())
-      return true;  // success
-    else {
-      // recover
-      bob.turn_right();
-      bob.turn_right();
-      bob.move();
-      bob.turn_left();
-      return false;  // no success
-    }
+    if (bob.on_marked_tile()) return true;  // success
+    // recover
+    bob.turn_right();
+    bob.turn_right();
+    bob.move();
+    bob.turn_left();
+    return false;  // no success
   };
   auto try_move_front = [&]() {
     bob.move();
-    if (bob.on_marked_tile())
-      return true;  // success
-    else {
-      // recover
-      bob.turn_right();
-      bob.turn_right();
-      bob.move();
-      bob.turn_left();
-      bob.turn_left();
-      return false;  // no success
-    }
+    if (bob.on_marked_tile()) return true;  // success
+    // recover
+    bob.turn_right();
+    bob.turn_right();
+    bob.move();
+    bob.turn_left();
+    bob.turn_left();
+    return false;  // no success
   };
   auto try_move_right = [&]() {
     bob.turn_right();
     bob.move();
-    if (bob.on_marked_tile())
-      return true;  // success
-    else {
-      // recover
-      bob.turn_left();
-      bob.turn_left();
-      bob.move();
-      bob.turn_right();
-      return false;  // no success
-    }
+    if (bob.on_marked_tile()) return true;  // success
+    // recover
+    bob.turn_left();
+    bob.turn_left();
+    bob.move();
+    bob.turn_right();
+    return false;  // no success
   };
 
   while (true) {
@@ -172,31 +163,25 @@ inline void level7(Bob& bob) {
       return false;      // no success
     }
     bob.move();
-    if (bob.on_marked_tile())
-      return true;  // success
-    else {
-      // recover
-      bob.turn_right();
-      bob.turn_right();
-      bob.move();
-      bob.turn_left();
-      return false;  // no success
-    }
+    if (bob.on_marked_tile()) return true;  // success
+    // recover
+    bob.turn_right();
+    bob.turn_right();
+    bob.move();
+    bob.turn_left();
+    return false;  // no success
   };
   auto try_move_front = [&]() {
     if (bob.wall_in_front()) return false;  // no success
     bob.move();
-    if (bob.on_marked_tile())
-      return true;  // success
-    else {
-      // recover
-      bob.turn_right();
-      bob.turn_right();
-      bob.move();
-      bob.turn_left();
-      bob.turn_left();
-      return false;  // no success
-    }
+    if (bob.on_marked_tile()) return true;  // success
+    // recover
+    bob.turn_right();
+    bob.turn_right();
+    bob.move();
+    bob.turn_left();
+    bob.turn_left();
+    return false;  // no success
   };
   auto try_move_right = [&]() {
     bob.turn_right();
@@ -205,16 +190,13 @@ inline void level7(Bob& bob) {
       return false;     // no success
     }
     bob.move();
-    if (bob.on_marked_tile())
-      return true;  // success
-    else {
-      // recover
-      bob.turn_left();
-      bob.turn_left();
-      bob.move();
-      bob.turn_right();
-      return false;  // no success
-    }
+    if (bob.on_marked_tile()) return true;  // success
+    // recover
+    bob.turn_left();
+    bob.turn_left();
+    bob.move();
+    bob.turn_right();
+    return false;  // no success
   };
 
   while (true) {
@@ -276,7 +258,7 @@ const auto debug_step_delay = std::chrono::milliseconds(250);
 std::vector<Position> reconstruct_path(const std::map<Position, Position>& came_from,
                                        Position current) {
   std::vector<Position> total_path = {current};
-  while (came_from.count(current)) {
+  while (came_from.count(current) != 0) {
     current = came_from.at(current);
     total_path.push_back(current);
   }
@@ -316,7 +298,7 @@ std::vector<Position> a_star(const Map& map, const Position& start, const Positi
 
   // Helper to get max_distance as default when accessing a map
   auto get = [&max_distance](auto& map, const Position& p) {
-    if (!map.count(p)) map.emplace(p, max_distance);
+    if (map.count(p) == 0) map.emplace(p, max_distance);
     return map[p];
   };
 
@@ -346,12 +328,12 @@ std::vector<Position> a_star(const Map& map, const Position& start, const Positi
     for (auto& neighbor : {up, down, left, right}) {
       if (map.tile(neighbor) == 'w') continue;  // Neighbor is wall and cannot be moved to
 
-      if (closed.count(neighbor)) continue;  // Ignore the neighbor which is already evaluated
+      if (closed.count(neighbor) != 0) continue;  // Ignore the neighbor which is already evaluated
 
       // The distance from start to a neighbor
       const int tentative_g_score = get(g_score, current) + 1;
 
-      if (!open.count(neighbor))
+      if (open.count(neighbor) == 0)
         open.insert(neighbor);  // Discovered a new node
       else if (tentative_g_score >= get(g_score, neighbor))
         continue;  // Already discovered and current path is not better
