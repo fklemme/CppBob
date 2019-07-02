@@ -1,7 +1,9 @@
 #include "Game.hpp"
 
+#include <filesystem>
 #include <fstream>
 #include <optional>
+#include <stdexcept>
 
 void window_handler(Game* game) {
   // Create window in thread
@@ -66,8 +68,7 @@ void window_handler(Game* game) {
 }
 
 void Game::load_map(const std::string& file_path) {
-  // Throw away old bob, if any
-  m_bob.reset();
+  if (!std::filesystem::exists(file_path)) throw std::logic_error("File not found: " + file_path);
 
   // Load map data from file
   std::ifstream in(file_path);
@@ -82,6 +83,9 @@ void Game::load_map(const std::string& file_path) {
     } else
       map_data.emplace_back(line.begin(), line.end());
   }
+
+  // Throw away old bob, if any
+  m_bob.reset();
 
   // Create new map
   m_map = std::make_shared<Map>(title ? *title : file_path, map_data);
