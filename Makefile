@@ -47,7 +47,6 @@ CHECKS := cppcoreguidelines-*,modernize-*,readability-*
 # Remove some unwanted checks
 CHECKS := $(CHECKS),-readability-braces-around-statements
 CHECKS := $(CHECKS),-readability-uppercase-literal-suffix
-CHECKS := $(CHECKS),-cppcoreguidelines-narrowing-conversions
 # Magic numbers are fine for now
 CHECKS := $(CHECKS),-readability-magic-numbers
 CHECKS := $(CHECKS),-cppcoreguidelines-avoid-magic-numbers

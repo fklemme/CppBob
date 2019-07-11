@@ -24,11 +24,11 @@ void window_handler(Game* game) {
         window.setTitle("CppBob - " + current_map->title());
         // Figure out suitable window size
         auto desktop = sf::VideoMode::getDesktopMode();
-        const float max_width = desktop.width * 0.8f;
-        const float max_height = desktop.height * 0.8f;
+        const float max_width = (float)desktop.width * 0.8f;
+        const float max_height = (float)desktop.height * 0.8f;
         float target_width = Map::tile_size_x * current_map->width();
         float target_height = Map::tile_size_y * current_map->height();
-        float scale_ratio = std::min(max_width / target_width, max_height / target_height);
+        const float scale_ratio = std::min(max_width / target_width, max_height / target_height);
         if (scale_ratio < 1.0f) {
           // Scale down, keeping aspect ratio
           target_width = target_width * scale_ratio;
@@ -36,8 +36,8 @@ void window_handler(Game* game) {
         }
         // Update size and position
         window.setSize(sf::Vector2u(target_width, target_height));
-        window.setPosition(
-            sf::Vector2i((desktop.width - target_width) / 2, (desktop.height - target_height) / 2));
+        window.setPosition(sf::Vector2i(((float)desktop.width - target_width) / 2,
+                                        ((float)desktop.height - target_height) / 2));
         // Update view
         sf::View view(sf::FloatRect(0.0f, 0.0f, Map::tile_size_x * current_map->width(),
                                     Map::tile_size_y * current_map->height()));
