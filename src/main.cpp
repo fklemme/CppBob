@@ -3,7 +3,7 @@
 #include "Game.hpp"
 
 // Choose the map to be loaded
-const std::string map = "maps/level1.map";
+const std::string map = "resources/maps/level1.map";
 
 // Guide Bob to the destination!
 // Have a look at Bob.hpp for some documentation.
