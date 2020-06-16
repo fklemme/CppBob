@@ -1,5 +1,7 @@
 # CppBob
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/972aed00d55c4215bbc821ac247bef6d)](https://app.codacy.com/manual/fklemme/CppBob?utm_source=github.com&utm_medium=referral&utm_content=fklemme/CppBob&utm_campaign=Badge_Grade_Dashboard)
+
 Learn algorithmic thinking in C++
 
 # Installation on Linux
