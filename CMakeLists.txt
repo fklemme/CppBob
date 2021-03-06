@@ -3,12 +3,21 @@ cmake_minimum_required(VERSION 3.11)
 # Program name
 project(cppbob)
 
-# Use modern C++
-set (CMAKE_CXX_STANDARD 17)
+# Define target
+add_executable(${PROJECT_NAME})
 
-# Add sources
-file(GLOB src "src/*.h" "src/*.cpp")
-add_executable(${PROJECT_NAME} ${src})
+# Use modern C++
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 17)
+# (Do not set C++ standard globally as SFML 2.5 is still using std::auto_ptr which has been removed in C++17)
+
+# Add sources and include directory
+file(GLOB_RECURSE hdr "${CMAKE_CURRENT_SOURCE_DIR}/src/*.hpp")
+file(GLOB_RECURSE src "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+#target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
+target_sources(${PROJECT_NAME} PRIVATE ${hdr} PRIVATE ${src})
+# For Visual Studio filters
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Header Files" FILES ${hdr})
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR}/src PREFIX "Source Files" FILES ${src})
 
 if(WIN32)
 	# Wordaround: Put Exe and Dlls into same directory, so they are found at run-time.
@@ -18,10 +27,10 @@ endif()
 
 # TODO: There should be a cleaner solution for this!?
 #       (I think this is only needed when not using default CMake)
-list(APPEND CMAKE_MODULE_PATH /usr/share/SFML/cmake/Modules)
+#list(APPEND CMAKE_MODULE_PATH /usr/share/SFML/cmake/Modules)
 
 # SFML
-find_package(SFML 2 COMPONENTS system window graphics audio)
+find_package(SFML 2 COMPONENTS system window graphics audio QUIET)
 if(NOT SFML_FOUND)
     message(STATUS "SFML not found. Fetching from Github...")
     include(FetchContent)
