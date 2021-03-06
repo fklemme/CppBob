@@ -1,6 +1,5 @@
 # CppBob
 
-
 [![pipeline status](https://gitlab.kruecke.net/fklemme/CppBob/badges/master/pipeline.svg)](https://gitlab.kruecke.net/fklemme/CppBob/-/pipelines?ref=master)
 
 Learn algorithmic thinking in C++
