@@ -1,0 +1,11 @@
+image: ubuntu:20.04
+
+build:
+  stage: build
+  before_script:
+    - export DEBIAN_FRONTEND=noninteractive
+    - apt-get update
+    - apt-get install -y cmake make g++ libsfml-dev
+  script:
+    - cmake -S . -B build
+    - cmake --build build
